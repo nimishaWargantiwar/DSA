@@ -30,23 +30,37 @@ class Solution {
         // int n=nums.length/2;
         // return nums[n];
 
-        int max=0;
-        int ans=0;
+//         int max=0;
+//         int ans=0;
 
-        HashMap<Integer,Integer> hm = new HashMap<>();
-        for(int n:nums)
-        {
-            int fre=hm.getOrDefault(n,0)+1;
-            hm.put(n,fre);
+//         HashMap<Integer,Integer> hm = new HashMap<>();
+//         for(int n:nums)
+//         {
+//             int fre=hm.getOrDefault(n,0)+1;
+//             hm.put(n,fre);
 
-            if(fre>max)
-            {
-                max=fre;
-                ans=n;
-            }
-        }
+//             if(fre>max)
+//             {
+//                 max=fre;
+//                 ans=n;
+//             }
+//         }
+// return ans;
+
+int n=nums.length/2;
+int ans=0;
+HashMap<Integer,Integer> hm = new HashMap<>();
+for(int n1:nums)
+{
+    hm.put(n1,hm.getOrDefault(n1,0)+1);
+}
+for(int n1:hm.keySet())
+{
+    if(hm.get(n1)>n)
+    {
+        ans=n1;
+    }
+}
 return ans;
-
-
     }
 }
