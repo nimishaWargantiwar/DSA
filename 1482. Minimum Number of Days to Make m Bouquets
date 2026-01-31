@@ -1,0 +1,113 @@
+1482. Minimum Number of Days to Make m Bouquets
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Hint
+You are given an integer array bloomDay, an integer m and an integer k.
+
+You want to make m bouquets. To make a bouquet, you need to use k adjacent flowers from the garden.
+
+The garden consists of n flowers, the ith flower will bloom in the bloomDay[i] and then can be used in exactly one bouquet.
+
+Return the minimum number of days you need to wait to be able to make m bouquets from the garden. If it is impossible to make m bouquets return -1.
+
+ 
+
+Example 1:
+
+Input: bloomDay = [1,10,3,10,2], m = 3, k = 1
+Output: 3
+Explanation: Let us see what happened in the first three days. x means flower bloomed and _ means flower did not bloom in the garden.
+We need 3 bouquets each should contain 1 flower.
+After day 1: [x, _, _, _, _]   // we can only make one bouquet.
+After day 2: [x, _, _, _, x]   // we can only make two bouquets.
+After day 3: [x, _, x, _, x]   // we can make 3 bouquets. The answer is 3.
+Example 2:
+
+Input: bloomDay = [1,10,3,10,2], m = 3, k = 2
+Output: -1
+Explanation: We need 3 bouquets each has 2 flowers, that means we need 6 flowers. We only have 5 flowers so it is impossible to get the needed bouquets and we return -1.
+Example 3:
+
+Input: bloomDay = [7,7,7,7,12,7,7], m = 2, k = 3
+Output: 12
+Explanation: We need 2 bouquets each should have 3 flowers.
+Here is the garden after the 7 and 12 days:
+After day 7: [x, x, x, x, _, x, x]
+We can make one bouquet of the first three flowers that bloomed. We cannot make another bouquet from the last three flowers that bloomed because they are not adjacent.
+After day 12: [x, x, x, x, x, x, x]
+It is obvious that we can make two bouquets in different ways.
+
+
+
+
+
+
+
+#solution:-
+class Solution {
+    public int []find(int b[])
+    {
+        int min=Integer.MAX_VALUE;
+        int max=Integer.MIN_VALUE;
+        for(int n:b)
+        {
+            min=Math.min(min,n);
+            max=Math.max(max,n);
+        }
+        return new int[]{min,max};
+    }
+
+    public boolean ifpossible(int min,int k,int m,int b[]){
+        int tot=0;
+        int count=0;
+        for(int i=0;i<b.length;i++)
+        {
+            if(b[i]<=min)
+            {
+                count++;
+            }
+            else
+            {
+                count=0;
+            }
+            if(count==k)
+            {
+                tot++;
+                count=0;
+            }
+            if(tot>=m)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public int minDays(int[] bloomDay, int m, int k) {
+        if((long)m*k>bloomDay.length)
+        {
+            return -1;
+        }
+        int range[]=find(bloomDay);
+        int start=range[0];
+        int end=range[1];
+        int ans=0;
+        while(start<=end)
+        {
+            int mid=(start+end)/2;
+            if(ifpossible(mid,k,m,bloomDay))
+            {
+                ans=mid;
+                end=mid-1;
+            }
+            else
+            {
+                start=mid+1;
+            }
+        }
+        return ans;        
+    }
+
+}
