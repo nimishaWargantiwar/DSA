@@ -1,30 +1,22 @@
 79. Word Search
-Solved
-Medium
-Topics
-premium lock icon
-Companies
 Given an m x n grid of characters board and a string word, return true if word exists in the grid.
-
 The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.
-
- 
-
 Example 1:
-
-
 Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
 Output: true
 Example 2:
-
-
 Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
 Output: true
 Example 3:
-
-
 Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
 Output: false
+
+
+
+
+
+
+
 
 
 
@@ -88,3 +80,337 @@ for(int i=0;i<board.length;i++)
             return false;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Explanation:-
+Perfect 🔥
+Let’s do a VERY deep dry run of your exact code.
+
+We’ll use the classic example from Word Search (LeetCode 79).
+
+🧪 Example
+
+Board:
+
+A B C E
+S F C S
+A D E E
+
+
+Word:
+
+"ABCCED"
+
+🔎 Your Code (Structure Reminder)
+
+You have:
+
+public boolean exist(char[][] board, String word)
+
+
+and
+
+public boolean helper(...)
+
+
+Now let’s dry run every line.
+
+🟢 STEP 1 — exist() starts
+for(int i=0;i<board.length;i++)
+
+
+board.length = 3
+
+So i = 0 → 1 → 2
+
+🔹 i = 0
+for(int j=0;j<board[0].length;j++)
+
+
+board[0].length = 4
+
+So j = 0 → 1 → 2 → 3
+
+🔹 i = 0, j = 0
+
+Board cell:
+
+board[0][0] = 'A'
+
+
+Now check:
+
+if(board[i][j] == word.charAt(0))
+
+
+word.charAt(0) = 'A'
+
+'A' == 'A' ✅ TRUE
+
+So we call:
+
+boolean found = helper(board, word, 0, 0, 0);
+
+🔵 STEP 2 — Enter helper(0,0,0)
+
+Parameters:
+
+r = 0
+c = 0
+widx = 0
+
+Line 1:
+if(widx == word.length())
+
+
+0 == 6 ? ❌ NO
+
+Continue.
+
+Get board size
+int rows = board.length;  // 3
+int cols = board[0].length; // 4
+
+Boundary check
+if(r<0 || c<0 || r>=rows || c>=cols)
+
+
+0<0 ? ❌
+
+0>=3 ? ❌
+
+Valid cell ✅
+
+Character check
+if(board[r][c]==' ' || board[r][c]!=word.charAt(widx))
+
+
+board[0][0] = 'A'
+
+word[0] = 'A'
+
+Matches ✅
+
+Mark as visited
+char ch = board[r][c];   // ch = 'A'
+board[r][c] = ' ';
+
+
+Board becomes:
+
+  B C E
+S F C S
+A D E E
+
+🔴 Now Try 4 Directions
+
+We try:
+
+helper(r-1, c, widx+1)   // Up
+helper(r, c+1, widx+1)   // Right
+helper(r+1, c, widx+1)   // Down
+helper(r, c-1, widx+1)   // Left
+
+
+widx+1 = 1
+Now looking for 'B'
+
+1️⃣ Try UP → (-1,0,1)
+
+Out of bounds ❌
+Returns false.
+
+2️⃣ Try RIGHT → (0,1,1)
+
+Call:
+
+helper(board, word, 0, 1, 1)
+
+🔵 STEP 3 — helper(0,1,1)
+
+Now looking for:
+
+word[1] = 'B'
+
+Boundary check → valid
+Character check:
+board[0][1] = 'B'
+word[1] = 'B'
+
+
+Match ✅
+
+Mark visited
+board[0][1] = ' '
+
+
+Board:
+
+    C E
+S F C S
+A D E E
+
+🔴 Now Look for word[2] = 'C'
+
+Try 4 directions:
+
+Up → (-1,1) ❌
+Right → (0,2)
+board[0][2] = 'C'
+word[2] = 'C'
+
+
+Match ✅
+
+Call:
+
+helper(0,2,2)
+
+🔵 STEP 4 — helper(0,2,2)
+
+Looking for:
+
+word[2] = 'C'
+
+
+Matches.
+
+Mark visited.
+
+Board:
+
+      E
+S F C S
+A D E E
+
+🔴 Now Look for word[3] = 'C'
+
+Try directions:
+
+Up → (-1,2) ❌
+Right → (0,3) = 'E' ❌
+Down → (1,2) = 'C' ✅
+
+Call:
+
+helper(1,2,3)
+
+🔵 STEP 5 — helper(1,2,3)
+
+Looking for:
+
+word[3] = 'C'
+
+
+Match ✅
+
+Mark visited.
+
+Board:
+
+      E
+S F   S
+A D E E
+
+🔴 Now Look for word[4] = 'E'
+
+Try directions:
+
+Up → (0,2) = ' ' ❌
+Right → (1,3) = 'S' ❌
+Down → (2,2) = 'E' ✅
+
+Call:
+
+helper(2,2,4)
+
+🔵 STEP 6 — helper(2,2,4)
+
+Looking for:
+
+word[4] = 'E'
+
+
+Match ✅
+
+Mark visited.
+
+🔴 Now Look for word[5] = 'D'
+
+Try:
+
+Up → (1,2) = ' ' ❌
+Right → (2,3) = 'E' ❌
+Down → (3,2) ❌
+Left → (2,1) = 'D' ✅
+
+Call:
+
+helper(2,1,5)
+
+🔵 STEP 7 — helper(2,1,5)
+
+Looking for:
+
+word[5] = 'D'
+
+
+Match ✅
+
+Mark visited.
+
+🔴 Now Try Next
+
+Call:
+
+helper(..., widx+1 = 6)
+
+🔵 STEP 8
+
+Now:
+
+if(widx == word.length())
+
+
+6 == 6 ✅ TRUE
+
+Return TRUE.
+
+🟢 Now What Happens?
+
+TRUE bubbles back up:
+
+helper(2,1,5) → true
+helper(2,2,4) → true
+helper(1,2,3) → true
+helper(0,2,2) → true
+helper(0,1,1) → true
+helper(0,0,0) → true
+
+🔥 Finally in exist()
+if(found)
+{
+    return true;
+}
+
+
+Returns TRUE.
