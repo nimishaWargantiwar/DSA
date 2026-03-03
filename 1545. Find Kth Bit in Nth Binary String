@@ -93,6 +93,18 @@ class Solution {
 
 
 #Explanation:-
+
+
+
+
+If middle → return 1
+If left → return based on index
+If right → return based on mirror and recursion stack, inverting bits while coming back
+
+
+
+
+
 (dry run an exmaple_
 Yesss 👏 now we go DEEP.
 
