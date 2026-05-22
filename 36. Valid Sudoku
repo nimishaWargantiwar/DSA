@@ -1,0 +1,565 @@
+36. Valid Sudoku
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+
+Each row must contain the digits 1-9 without repetition.
+Each column must contain the digits 1-9 without repetition.
+Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+Note:
+
+A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+Only the filled cells need to be validated according to the mentioned rules.
+ 
+
+Example 1:
+
+
+Input: board = 
+[["5","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+Output: true
+Example 2:
+
+Input: board = 
+[["8","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+Output: false
+Explanation: Same as Example 1, except with the 5 in the top left corner being modified to 8. Since there are two 8's in the top left 3x3 sub-box, it is invalid.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#solution:-
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+       for(int i=0;i<9;i++)
+       {
+        for(int j=0;j<9;j++)
+        {
+            char num=board[i][j];
+
+            if(num=='.')
+            {
+                continue;
+            }
+            board[i][j]='.';
+
+            if(!isvalid(board,i,j,num))
+            {
+                return false;
+            }
+
+             board[i][j]=num;
+        }
+       }
+       return true;
+    }
+
+    public boolean isvalid(char board[][],int r,int c,int num)
+    {
+        for(int i=0;i<9;i++)
+        {
+            if(board[r][i]==num)
+            {
+                return false;
+            }
+        }
+
+        for(int i=0;i<9;i++)
+        {
+            if(board[i][c]==num)
+            {
+                return false;
+            }
+        }
+
+        int sr=(r/3)*3;
+        int sc=(c/3)*3;
+
+        for(int i=sr;i<sr+3;i++)
+        {
+            for(int j=sc;j<sc+3;j++)
+            {
+                if(board[i][j]==num)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#explanation:-
+---
+
+# WHAT IS THE MAIN IDEA?
+
+For every number on the board:
+
+we ask:
+
+```text id="jlwm8n"
+Can this number safely stay here?
+```
+
+Meaning:
+
+```text id="9jlwm3"
+- no duplicate in row
+- no duplicate in column
+- no duplicate in box
+```
+
+If duplicate exists → invalid Sudoku.
+
+---
+
+# PART 1 → Traverse Entire Board
+
+```java id="0jlwm8"
+for(int row = 0; row < 9; row++) {
+
+    for(int col = 0; col < 9; col++) {
+```
+
+This visits every cell.
+
+Like:
+
+```text id="5jlwm7"
+(0,0)
+(0,1)
+(0,2)
+...
+```
+
+---
+
+# PART 2 → Take Current Number
+
+```java id="7jlwm1"
+char num = board[row][col];
+```
+
+Suppose:
+
+```text id="4jlwm9"
+board[0][0] = '5'
+```
+
+Then:
+
+```text id="1jlwm5"
+num = '5'
+```
+
+---
+
+# PART 3 → Ignore Empty Cells
+
+```java id="6jlwm3"
+if(num == '.') {
+    continue;
+}
+```
+
+`.` means empty.
+
+We only care about numbers.
+
+---
+
+# PART 4 → TEMPORARILY REMOVE NUMBER
+
+```java id="3jlwm7"
+board[row][col] = '.';
+```
+
+THIS IS VERY IMPORTANT.
+
+Suppose current cell:
+
+```text id="8jlwm1"
+5
+```
+
+temporarily becomes:
+
+```text id="2jlwm7"
+.
+```
+
+Why?
+
+Because while checking row/column/box:
+
+the number would find itself.
+
+Then we’d think duplicate exists.
+
+So we temporarily remove it.
+
+---
+
+# EXAMPLE
+
+Suppose row:
+
+```text id="0jlwm0"
+5 3 . . 7
+```
+
+We are checking first `5`.
+
+If we DON’T remove it:
+
+while scanning row,
+
+we find same `5` immediately.
+
+Wrong duplicate.
+
+So we remove it temporarily.
+
+---
+
+# PART 5 → CHECK VALIDITY
+
+```java id="9jlwm7"
+if(!isSafe(board, row, col, num))
+```
+
+Meaning:
+
+```text id="5jlwm2"
+If this number is NOT safe here
+```
+
+then:
+
+```java id="7jlwm9"
+return false;
+```
+
+Sudoku invalid.
+
+---
+
+# PART 6 → PUT NUMBER BACK
+
+```java id="1jlwm0"
+board[row][col] = num;
+```
+
+Restore original board.
+
+---
+
+# NOW IMPORTANT FUNCTION → isSafe()
+
+This checks:
+
+```text id="4jlwm2"
+Can this number stay here safely?
+```
+
+---
+
+# ROW CHECK
+
+```java id="8jlwm3"
+for(int i = 0; i < 9; i++) {
+
+    if(board[row][i] == num) {
+        return false;
+    }
+}
+```
+
+---
+
+# Example
+
+Suppose:
+
+```text id="2jlwm5"
+row = 0
+num = '5'
+```
+
+We scan:
+
+```text id="6jlwm2"
+board[0][0]
+board[0][1]
+board[0][2]
+...
+```
+
+If another `5` found:
+
+```java id="0jlwm9"
+return false;
+```
+
+duplicate in row.
+
+---
+
+# COLUMN CHECK
+
+```java id="3jlwm5"
+for(int i = 0; i < 9; i++) {
+
+    if(board[i][col] == num) {
+        return false;
+    }
+}
+```
+
+---
+
+# Example
+
+Suppose:
+
+```text id="9jlwm2"
+col = 3
+num = '7'
+```
+
+We scan vertically:
+
+```text id="5jlwm4"
+board[0][3]
+board[1][3]
+board[2][3]
+...
+```
+
+If another `7` found:
+
+duplicate in column.
+
+---
+
+# BOX CHECK
+
+THIS IS THE HARDEST PART.
+
+---
+
+# FIND TOP LEFT OF BOX
+
+```java id="1jlwm7"
+int startRow = (row / 3) * 3;
+int startCol = (col / 3) * 3;
+```
+
+---
+
+# Example
+
+Suppose:
+
+```text id="7jlwm2"
+row = 4
+col = 5
+```
+
+Then:
+
+```text id="4jlwm6"
+row/3 = 1
+col/3 = 1
+```
+
+So:
+
+```text id="0jlwm1"
+startRow = 3
+startCol = 3
+```
+
+Meaning:
+
+start of middle box.
+
+---
+
+# Middle Box Coordinates
+
+```text id="8jlwm5"
+(3,3) (3,4) (3,5)
+(4,3) (4,4) (4,5)
+(5,3) (5,4) (5,5)
+```
+
+---
+
+# CHECK ENTIRE BOX
+
+```java id="2jlwm4"
+for(int i = startRow; i < startRow + 3; i++) {
+
+    for(int j = startCol; j < startCol + 3; j++) {
+
+        if(board[i][j] == num) {
+            return false;
+        }
+    }
+}
+```
+
+We scan all 9 cells of box.
+
+If duplicate found:
+
+```java id="6jlwm9"
+return false;
+```
+
+---
+
+# IF EVERYTHING PASSES
+
+```java id="9jlwm4"
+return true;
+```
+
+Meaning:
+
+```text id="3jlwm6"
+This number can safely stay here
+```
+
+---
+
+# COMPLETE DRY RUN
+
+Suppose:
+
+```text id="1jlwm4"
+board[0][0] = '5'
+```
+
+---
+
+## Remove it
+
+```text id="5jlwm3"
+.
+```
+
+---
+
+## Check row
+
+No other `5`.
+
+---
+
+## Check column
+
+No other `5`.
+
+---
+
+## Check box
+
+No other `5`.
+
+---
+
+## Safe
+
+Return TRUE.
+
+Put `5` back.
+
+---
+
+# LATER
+
+Suppose another `5` exists in same box.
+
+During box scan:
+
+```java id="7jlwm6"
+if(board[i][j] == num)
+```
+
+becomes TRUE.
+
+So:
+
+```java id="0jlwm3"
+return false;
+```
+
+Sudoku invalid.
+
+---
+
+# SIMPLEST MENTAL MODEL
+
+For every number:
+
+```text id="4jlwm7"
+Remove it
+Check surroundings
+Put it back
+```
+
+That’s literally the whole algorithm.
