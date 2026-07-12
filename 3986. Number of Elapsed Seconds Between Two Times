@@ -1,0 +1,62 @@
+3986. Number of Elapsed Seconds Between Two Times
+Solved
+Easy
+premium lock icon
+Companies
+Hint
+You are given two valid times startTime and endTime, each represented as a string in the format "HH:MM:SS".
+
+Return the number of seconds that have elapsed from startTime to endTime.
+
+ 
+
+Example 1:
+
+Input: startTime = "01:00:00", endTime = "01:00:25"
+
+Output: 25
+
+Explanation:
+
+endTime is 25 seconds ahead of startTime.
+Example 2:
+
+Input: startTime = "12:34:56", endTime = "13:00:00"
+
+Output: 1504
+
+Explanation:
+
+endTime is 25 minutes and 4 seconds ahead of startTime, which equals 1504 seconds.
+
+
+
+
+
+
+
+
+
+
+#solution:-
+class Solution {
+    public int secondsBetweenTimes(String startTime, String endTime) {
+        String start[]=startTime.split(":");
+        String end[]=endTime.split(":");
+
+        int h1=Integer.parseInt(start[0]);
+        int m1=Integer.parseInt(start[1]);
+        int s1=Integer.parseInt(start[2]);
+
+        int h2=Integer.parseInt(end[0]);
+        int m2=Integer.parseInt(end[1]);
+        int s2=Integer.parseInt(end[2]);
+
+        int a=(h1*3600)+(m1*60)+s1;
+        int b=(h2*3600)+(m2*60)+s2;
+
+        return b-a;
+
+
+    }
+}
