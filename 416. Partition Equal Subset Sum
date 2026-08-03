@@ -1,0 +1,77 @@
+416. Partition Equal Subset Sum
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
+
+ 
+
+Example 1:
+
+Input: nums = [1,5,11,5]
+Output: true
+Explanation: The array can be partitioned as [1, 5, 5] and [11].
+Example 2:
+
+Input: nums = [1,2,3,5]
+Output: false
+Explanation: The array cannot be partitioned into equal sum subsets.
+ 
+
+Constraints:
+
+1 <= nums.length <= 200
+1 <= nums[i] <= 100
+
+
+
+
+
+
+#soltion:-
+class Solution {
+    public boolean canPartition(int[] nums) {
+    
+        int tot=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            tot+=nums[i];
+        }
+    Boolean dp [][]=new Boolean[nums.length+1][(tot/2)+1];
+        if(tot%2==0)
+        {
+            return helper(0,tot/2,nums,dp);
+        }
+        return false;
+    }
+
+    public boolean helper(int i,int tot,int nums[],Boolean dp[][])
+    {
+        if(tot==0)
+        {
+            return true;
+        }
+
+        if(i==nums.length)
+        {
+            return false;
+        }
+
+        if(dp[i][tot]!=null)
+        {
+            return dp[i][tot];
+        }
+
+boolean take=false;
+if(nums[i]<=tot)
+{
+     take=helper(i+1,tot-nums[i],nums,dp);
+}
+        boolean dont=helper(i+1,tot,nums,dp);
+
+        dp[i][tot]= take || dont;
+        return dp[i][tot];
+    }
+}
