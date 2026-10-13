@@ -1,0 +1,74 @@
+131. Palindrome Partitioning
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
+
+ 
+
+Example 1:
+
+Input: s = "aab"
+Output: [["a","a","b"],["aa","b"]]
+Example 2:
+
+Input: s = "a"
+Output: [["a"]]
+ 
+
+Constraints:
+
+1 <= s.length <= 16
+s contains only lowercase English letters.
+
+
+
+
+
+#Solution:-
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<String> curr= new ArrayList<>();
+        List<List<String>> ll = new ArrayList<>();
+        part(s,0,curr,ll);
+        return ll;
+    }
+
+    public void part(String s,int st,List<String> curr,List<List<String>> ll)
+    {
+if(s.length()==st)
+{
+    ll.add(new ArrayList<>(curr));
+    return ;
+}
+
+for(int i=st;i<s.length();i++)
+{
+    String sub=s.substring(st,i+1);
+    if(pali(sub))
+    {
+        curr.add(sub);
+        part(s,i+1,curr,ll);
+        curr.remove(curr.size()-1);
+    }
+}
+    }
+
+    public boolean pali(String s)
+    {
+        int l=0;
+        int r=s.length()-1;
+        while(l<r)
+        {
+            if(s.charAt(l)!=s.charAt(r))
+            {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+}
